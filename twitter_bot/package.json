@@ -3,14 +3,14 @@
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": "Shouvik Mani",
   "license": "ISC",
   "dependencies": {
     "markov": "0.0.7",
     "request": "^2.69.0",
     "twitter": "^1.2.5"
+  },
+  "engines": {
+    "node": "0.12.2"
   }
 }
