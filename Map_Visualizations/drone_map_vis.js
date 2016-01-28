@@ -15,6 +15,7 @@ $.ajax({
        console.log(json);
        strikeData = json['strike'];
        plotMarkers(strikeData);
+       addSatImages(strikeData);
     },
     error: function(e) {
        console.log(e.message);
@@ -61,6 +62,24 @@ function getMarkerIcon(country) {
 		return L.icon({iconUrl: 'static/green_marker.svg'});
 	} else {
 		return L.icon({iconUrl: 'static/white_marker.svg'});
+	}
+}
+
+function addSatImages(data) {
+	var googleMapsApiKey = 'AIzaSyBLtOssY47tO3dbrV6liAY5X7LhVjTaNw8'
+	var zoomLevel = '17';
+	var googleMapsRootURL = 'https://maps.googleapis.com/maps/api/staticmap?';
+	var size = '220x220';
+	var mapType = 'satellite';
+	for (var i = data.length - 1; i > -1; i--) {
+		var strikeLat = data[i]['lat'];
+		var strikeLon = data[i]['lon'];
+
+		var mapURL = googleMapsRootURL + 'center=' + strikeLat + ',' + strikeLon
+						+ '&zoom=' + zoomLevel + '&size=' + size + '&maptype='
+						+ mapType + '&key=' + googleMapsApiKey;
+		console.log(mapURL);
+		$('#sat-image-grid').append('<img class="sat-image" src=' + mapURL + '>');
 	}
 }
 
