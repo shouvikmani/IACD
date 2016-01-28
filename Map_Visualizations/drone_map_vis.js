@@ -64,8 +64,5 @@ function getMarkerIcon(country) {
 	}
 }
 
-
-
-
 //Hides bottom label
 document.getElementsByClassName('leaflet-control-attribution leaflet-control')[0].style.display = 'none';
