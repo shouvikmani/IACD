@@ -1,6 +1,5 @@
 /maps-cmu
-/Open_Frameworks
-twitter_bot/config.js
+/twitter_bot/config.js
 twitter_bot/imageDir/
 **/node_modules
 
