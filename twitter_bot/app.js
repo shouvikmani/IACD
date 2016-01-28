@@ -1,5 +1,8 @@
 var fs = require('fs');
+var util = require('util');
 var request = require('request');
+var Twitter = require('twitter');
+var markov = require('markov');
 var config = require('./config');
 
 console.log("Starting Twitter Bot Transmission");
@@ -9,7 +12,6 @@ var rootUrl = 'https://api.datamarket.azure.com/Bing/Search';
 var searchFilter = '/Image?$top=60&Query='
 var query = 'Donald Trump';
 
-//Fetching Data from Bing Search API
 request({
     url : rootUrl + searchFilter + query,
     method: 'GET',
@@ -55,10 +57,50 @@ function downloadImage(image) {
 	};
 
 	download(imageUrl, './imageDir/twitter_img', function(){
-	  makeTwitterPost('./imageDir/twitter_img');
+		makeTwitterPost('./imageDir/twitter_img');
 	});
 }
 
 function makeTwitterPost(imagePath) {
-	console.log(imagePath);
+	var client = twitterAuthenticate();
+	var image = fs.readFileSync('./imageDir/twitter_img');
+	var postImage = function(markovText) {
+		client.post('media/upload', {media: image}, function(error, media, response){
+		  if (!error) {
+		    var status = {
+		      status: markovText,
+		      media_ids: media.media_id_string // Pass the media id string
+		    }
+		    client.post('statuses/update', status, function() {
+		    	if (!error) {
+		    		console.log('Post succuessful!');
+		    	}
+		    });
+		  }
+		});
+	}
+	generateMarkovText(postImage);
+}
+
+function twitterAuthenticate() {
+	var client = new Twitter({
+	  consumer_key: config.twitterConsumerKey,
+	  consumer_secret: config.twitterConsumerSecret,
+	  access_token_key: config.twitterAccessToken,
+	  access_token_secret: config.twitterAccessTokenSecret
+	});
+	return client;
+}
+
+function generateMarkovText(callback) {
+	var m = markov(4);
+	var s = fs.readFileSync('donald_corpus.txt');
+	m.seed(s, function(){
+		var markovText = m.respond('', 4).join(' ');
+		var lastPeriodIndex = markovText.lastIndexOf('.')
+		if (lastPeriodIndex != -1) {
+			markovText = markovText.slice(0, lastPeriodIndex + 1);
+		}
+		callback(markovText);
+	});
 }

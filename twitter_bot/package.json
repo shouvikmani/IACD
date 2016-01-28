@@ -9,6 +9,8 @@
   "author": "Shouvik Mani",
   "license": "ISC",
   "dependencies": {
-    "request": "^2.69.0"
+    "markov": "0.0.7",
+    "request": "^2.69.0",
+    "twitter": "^1.2.5"
   }
 }
