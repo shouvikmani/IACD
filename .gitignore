@@ -1,5 +1,7 @@
 /maps-cmu
-/node_modules
 /Open_Frameworks
+twitter_bot/config.js
+twitter_bot/imageDir/
+**/node_modules
 
 .DS_Store
