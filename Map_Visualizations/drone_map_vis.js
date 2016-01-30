@@ -6,13 +6,13 @@ var CartoDB_DarkMatter = L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/
 	maxZoom: 19
 }).addTo(map);
 
+//AJAX Request to get 
 $.ajax({
 	type: 'GET',
     url: 'http://api.dronestre.am/data',
     contentType: "application/json",
     dataType: 'jsonp',
     success: function(json) {
-       console.log(json);
        strikeData = json['strike'];
        plotMarkers(strikeData);
        addSatImages(strikeData);
@@ -78,10 +78,15 @@ function addSatImages(data) {
 		var mapURL = googleMapsRootURL + 'center=' + strikeLat + ',' + strikeLon
 						+ '&zoom=' + zoomLevel + '&size=' + size + '&maptype='
 						+ mapType + '&key=' + googleMapsApiKey;
-		console.log(mapURL);
 		$('#sat-image-grid').append('<img class="sat-image" src=' + mapURL + '>');
 	}
 }
 
 //Hides bottom label
-document.getElementsByClassName('leaflet-control-attribution leaflet-control')[0].style.display = 'none';
+$('.leaflet-control-attribution').hide();
+//Sets map height to 80% of screen height
+//(had troubles directly with css)
+$('#map').height(function() {
+	return (window.innerHeight * 0.75) + 'px';
+});
+map.invalidateSize(true);
