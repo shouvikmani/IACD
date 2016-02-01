@@ -6,7 +6,7 @@ var CartoDB_DarkMatter = L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/
 	maxZoom: 19
 }).addTo(map);
 
-//AJAX Request to get 
+//AJAX Request to get drone strike data
 $.ajax({
 	type: 'GET',
     url: 'http://api.dronestre.am/data',
@@ -20,7 +20,7 @@ $.ajax({
     error: function(e) {
        console.log(e.message);
     }
-})
+});
 
 function plotMarkers(data) {
 	var marker;
@@ -65,6 +65,7 @@ function getMarkerIcon(country) {
 	}
 }
 
+//Adds a grid of static sattelite imagery
 function addSatImages(data) {
 	var googleMapsApiKey = 'AIzaSyBLtOssY47tO3dbrV6liAY5X7LhVjTaNw8'
 	var zoomLevel = '17';
@@ -80,6 +81,17 @@ function addSatImages(data) {
 						+ mapType + '&key=' + googleMapsApiKey;
 		$('#sat-image-grid').append('<img class="sat-image" src=' + mapURL + '>');
 	}
+	adjustImageSizes();
+}
+
+//Ensures images fill whole grid (90%)
+function adjustImageSizes() {
+	cellWidth = window.innerWidth * 0.90
+	imageWidth = 220 + 6;	//3px margins on both right and left
+	numImages = Math.floor(cellWidth / imageWidth);
+	newImageSize = cellWidth / numImages;
+	$(".sat-image").height((newImageSize - 6) + 'px');
+	$(".sat-image").width((newImageSize - 6) + 'px');
 }
 
 //Hides bottom label
