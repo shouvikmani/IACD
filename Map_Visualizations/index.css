@@ -30,6 +30,15 @@ body {
 	margin-right: 10%;
 }
 
+#source {
+	font-size: 8px;
+}
+
+#source a {
+	color: #ddd;
+	text-decoration: none;
+}
+
 #sat-image-grid {
     display: block;
     width: 90%;
