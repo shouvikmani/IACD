@@ -81,19 +81,7 @@ function addSatImages(data) {
 						+ mapType + '&key=' + googleMapsApiKey;
 		$('#sat-image-grid').append('<img class="sat-image" src=' + mapURL + '>');
 	}
-	adjustImageSizes();
 }
-
-//Ensures images fill whole grid (90%)
-function adjustImageSizes() {
-	cellWidth = window.innerWidth * 0.90
-	imageWidth = 220 + 6;	//3px margins on both right and left
-	numImages = Math.floor(cellWidth / imageWidth);
-	newImageSize = cellWidth / numImages;
-	$(".sat-image").height((newImageSize - 6) + 'px');
-	$(".sat-image").width((newImageSize - 6) + 'px');
-}
-
 //Hides bottom label
 $('.leaflet-control-attribution').hide();
 //Sets map height to 80% of screen height

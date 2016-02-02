@@ -26,12 +26,12 @@ body {
 
 #description {
 	font-size: 15pt;
-	margin-left: 10%;
-	margin-right: 10%;
+	margin-left: 8%;
+	margin-right: 8%;
 }
 
 #source {
-	font-size: 8px;
+	font-size: 10px;
 }
 
 #source a {
@@ -42,13 +42,13 @@ body {
 #sat-image-grid {
     display: block;
     width: 90%;
+    text-align: center;
     margin-left: auto;
     margin-right: auto;
 }
 
 .sat-image {
 	display: inline;
-	margin-left: 3px;
-	margin-right: 3px;
+	margin-right: 6px;
 	margin-bottom: 3px;
 }
