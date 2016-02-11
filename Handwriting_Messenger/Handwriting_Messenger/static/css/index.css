@@ -1,0 +1,130 @@
+#message-canvas {
+	width: 1270px;
+	height: 690px;
+	border: 2px solid #777;
+	border-radius: 5px;
+	position: relative;
+	margin: 5px 5px 5px 5px;
+}
+
+#clear-button {
+	position: absolute;
+	bottom: 10px;
+	left: 10px;
+	width: 40px;
+    height: 40px;
+    background-color: white;
+    border: 1px solid #777;
+    border-radius: 4px;
+    cursor: pointer
+}
+
+.refresh-image {
+	width: inherit;
+}
+
+.circle-image {
+	width: 25px;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 7px;
+}
+
+.line-image {
+	width: 25px;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 17px;
+}
+
+#black-button {
+	position: absolute;
+	bottom: 10px;
+	left: 60px;
+	width: 40px;
+    height: 40px;
+    background-color: white;
+    border: 1px solid #777;
+    border-radius: 4px;
+    cursor: pointer
+}
+
+#red-button {
+	position: absolute;
+	bottom: 10px;
+	left: 110px;
+	width: 40px;
+    height: 40px;
+    background-color: white;
+    border: 1px solid #777;
+    border-radius: 4px;
+    cursor: pointer
+}
+
+#green-button {
+	position: absolute;
+	bottom: 10px;
+	left: 160px;
+	width: 40px;
+    height: 40px;
+    background-color: white;
+    border: 1px solid #777;
+    border-radius: 4px;
+    cursor: pointer
+}
+
+#blue-button {
+	position: absolute;
+	bottom: 10px;
+	left: 210px;
+	width: 40px;
+    height: 40px;
+    background-color: white;
+    border: 1px solid #777;
+    border-radius: 4px;
+    cursor: pointer
+}
+
+#small-button {
+	position: absolute;
+	bottom: 60px;
+	left: 10px;
+	width: 40px;
+    height: 40px;
+    background-color: white;
+    border: 1px solid #777;
+    border-radius: 4px;
+    cursor: pointer
+}
+
+#medium-button {
+	position: absolute;
+	bottom: 110px;
+	left: 10px;
+	width: 40px;
+    height: 40px;
+    background-color: white;
+    border: 1px solid #777;
+    border-radius: 4px;
+    cursor: pointer
+}
+
+#large-button {
+	position: absolute;
+	bottom: 160px;
+	left: 10px;
+	width: 40px;
+    height: 40px;
+    background-color: white;
+    border: 1px solid #777;
+    border-radius: 4px;
+    cursor: pointer
+}
+
+#share-button {
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+}

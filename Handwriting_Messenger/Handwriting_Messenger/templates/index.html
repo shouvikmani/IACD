@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset='utf-8'>
+	<title>Picto Message</title>
+	{% load staticfiles %}
+	<!-- JQuery -->
+	<script src='//code.jquery.com/jquery-1.12.0.min.js'></script>
+	<script src='//code.jquery.com/jquery-migrate-1.2.1.min.js'></script>
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+	<!-- Custom Styles -->
+	<link href="{% static 'css/index.css' %}" rel='stylesheet'>
+</head>
+<body>
+	<div id="message-canvas">
+		<div id="clear-button" type="button" onclick="refreshDrawing();" >
+			<img class="refresh-image" src="{% static 'images/refresh_button.svg' %}">
+		</div>
+		<div id="black-button" type="button" onclick="changeColor(colorBlack)">
+			<img class="circle-image" id="black-circle" src="{% static 'images/black_circle.svg' %}">
+		</div>
+		<div id="red-button" type="button" onclick="changeColor(colorRed)">
+			<img class="circle-image" id="red-circle" src="{% static 'images/red_circle.svg' %}">
+		</div>
+		<div id="green-button" type="button" onclick="changeColor(colorGreen)">
+			<img class="circle-image" id="green-circle" src="{% static 'images/green_circle.svg' %}">
+		</div>
+		<div id="blue-button" type="button" onclick="changeColor(colorBlue)">
+			<img class="circle-image" id="blue-circle" src="{% static 'images/blue_circle.svg' %}">
+		</div>
+		<div id="small-button" type="button" onclick="changeStroke(lineThin)">
+			<img class="line-image" id="thin-line" src="{% static 'images/thin_line.svg' %}">
+		</div>
+		<div id="medium-button" type="button" onclick="changeStroke(lineMedium)">
+			<img class="line-image" id="medium-line" src="{% static 'images/medium_line.svg' %}">
+		</div>
+		<div id="large-button" type="button" onclick="changeStroke(lineLarge)">
+			<img class="line-image" id="large-line" src="{% static 'images/large_line.svg' %}">
+		</div>
+		<button type="button" class="btn btn-success" id="share-button" data-toggle="modal" data-target="#myModal">Share</button>
+		<!-- Modal -->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		    	<form action="/email/" method="post">
+		    	{% csrf_token %}
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title" id="myModalLabel">Email Message</h4>
+			      </div>
+			      <div class="modal-body">
+						  <div class="form-group">
+						  	<label for="name">Your name</label>
+						    <input type="text" class="form-control" id="name" name="name" placeholder="Name">
+						    <br>
+						    <label for="recipienrEmail">Recipient's email address</label>
+						    <input type="email" class="form-control" id="recipientEmail" name="recipientEmail" placeholder="Email">
+						    <input type="hidden" class="form-control" id="canvasBase64" name="canvasBase64" value="">
+						  </div>
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			        <button type="submit" class="btn btn-primary" onclick="saveCanvas();">Send Email</button>
+			      </div>
+		      </form>
+		    </div>
+		  </div>
+		</div>
+	</div>
+</body>
+<!-- Canvas Script -->
+<script src="{% static 'js/canvas.js' %}"></script>
+</html>
