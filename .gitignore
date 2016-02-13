@@ -1,7 +1,10 @@
 /maps-cmu
 /Open_Frameworks
+**/node_modules
+
 /twitter_bot/config.js
 twitter_bot/imageDir/
-**/node_modules
+
+/Handwriting_Messenger/Handwriting_Messenger/config.py
 
 .DS_Store
