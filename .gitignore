@@ -8,3 +8,4 @@ twitter_bot/imageDir/
 /Handwriting_Messenger/Handwriting_Messenger/config.py
 
 .DS_Store
+**.pyc

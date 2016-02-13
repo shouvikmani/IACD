@@ -11,13 +11,16 @@ def email(request):
 	name = request.POST['name']
 	recipientEmail = request.POST['recipientEmail']
 	base64Image = request.POST['canvasBase64']
-	#saveImage(base64Image)
+	saveImageToFile(base64Image)
 	email = EmailMessage('Picto Message from %s' % name, '', 
 			'shouvik.mani@gmail.com', [recipientEmail], [], [], headers={})
+	email.attach_file('picto_message.png')
 	email.send()
 	return redirect('/')
 
-def saveImage(base64Image):
-	fh = open("picto_message.jpg", "wb")
-	fh.write(base64Image.decode('base64'))
-	fh.close()
+def saveImageToFile(base64Image):
+	#Parses base64 data out of base64Image
+	base64String = base64Image.replace('data:image/png;base64,', '')
+	image = base64.b64decode(base64String)
+	with open('picto_message.png', 'wb') as f:
+		f.write(image)

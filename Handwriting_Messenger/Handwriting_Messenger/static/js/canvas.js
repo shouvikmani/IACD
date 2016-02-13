@@ -101,6 +101,6 @@ function changeStroke(stroke) {
 	this.curSize = stroke;
 }
 
-function saveCanvas() {
-	document.getElementById("canvasBase64").value = canvas.toDataURL("image/jpg", 1.0);
+function attachBase64Image() {
+	document.getElementById("canvasBase64").value = canvas.toDataURL();
 }
