@@ -7,5 +7,9 @@ twitter_bot/imageDir/
 
 /Handwriting_Messenger/Handwriting_Messenger/config.py
 
+**/World_Cup_Visualization/data/
+/World_Cup_Visualization/config.py
+/World_Cup_Visualization/nohup.out
+
 .DS_Store
 **.pyc
