@@ -1,4 +1,3 @@
-from time import time
 from csv import DictReader, DictWriter
 
 def readFile(source):

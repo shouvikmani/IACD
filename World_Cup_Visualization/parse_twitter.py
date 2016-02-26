@@ -6,7 +6,7 @@ import json
 import datetime
 import sys
 from pprint import pprint
-from time import time
+from time import time, sleep
 
 from twitter_auth import authenticate
 from read_data import readFile, writeToFile, setHeaders
@@ -23,9 +23,9 @@ def getRequest(query_url):
 	data = json.loads(r.text)
 	return data
 
-def getRateLimit():
+def getRateLimit(resource):
 	base_url = 'https://api.twitter.com/1.1/application/rate_limit_status.json?'
-	params = {'resources': 'statuses'}
+	params = {'resources': resource}
 	paramsEncode = urllib.urlencode(params)
 	query_url = base_url + paramsEncode
 	rateLimitStatus = getRequest(query_url)
@@ -87,7 +87,6 @@ def getTweetsFromId(tweetIdList, belongsToRow):
 #Parses and returns a list of tweetIDs from a list of data
 #starting at startRow and ending at endRow
 def parseTweetIds(dataLines, startRow, endRow):
-	start = time()
 	dataList = []
 	for i in xrange(startRow, endRow+1):
 		instanceDict = dict()
@@ -97,35 +96,39 @@ def parseTweetIds(dataLines, startRow, endRow):
 		dataList.append(instanceDict)
 	return dataList
 
-#TODO: Use end to enforce upper limit on requestEndRow
-def downloadAllTweets(start, end):
+def downloadAllTweets(start, end, tweetTargetSource):
 	requestStartRow = start
 	requestEndRow = start + 99
 	numRequests = 0
 	tweetIdSource = 'data/tweets.csv'
-	tweetTargetSource = 'data/completeTweets.csv'
 	dataLines = readFile(tweetIdSource).splitlines()
 	fieldnames = ['id_str', 'created_at', 'coordinates', 'hashtags', 'text', 'belongsToRow']
 	setHeaders(tweetTargetSource, fieldnames)
-	while (numRequests < 60):
-		tweetIdList = parseTweetIds(dataLines, requestStartRow, requestEndRow)
-		tweetData = getTweetsFromId(tweetIdList, requestStartRow)
-		print tweetData
-		print numRequests
-		print
-		writeToFile(tweetData, tweetTargetSource, fieldnames)
-		requestStartRow += 100
-		requestEndRow += 100
-		numRequests += 1
-	print getRateLimit()
+	while(requestEndRow <= end):
+		print "Parsing rows " + str(requestStartRow) + '-' + str(requestStartRow + 5999) + ' out of ' + str(end)
+		#Inner while loop handles API Rate limit logic
+		while (numRequests < 60):
+			tweetIdList = parseTweetIds(dataLines, requestStartRow, requestEndRow)
+			tweetData = getTweetsFromId(tweetIdList, requestStartRow)
+			print "Request: " + str(numRequests)
+			writeToFile(tweetData, tweetTargetSource, fieldnames)
+			requestStartRow += 100
+			requestEndRow += 100
+			numRequests += 1
+		print "Rate Limit Exceeded. Waiting...\n"
+		while (getRateLimit('statuses')['resources']['statuses']['/statuses/lookup']['remaining'] == 0):
+			sleep(120)	#Suspends execution until rate limit refreshed
+		numRequests = 0
+	print "Done!"
 
 def main():
-	start = time()
 	startRow = int(sys.argv[1])
 	endRow = int(sys.argv[2])
+	APIKeyNum = int(sys.argv[3])
+	tweetTargetSource = sys.argv[4]
 	global bearerToken
-	bearerToken = authenticate(int(sys.argv[3]))
-	downloadAllTweets(startRow, endRow)
+	bearerToken = authenticate(APIKeyNum)
+	downloadAllTweets(startRow, endRow, tweetTargetSource)
 
 if __name__ == '__main__':
 	main()
