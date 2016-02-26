@@ -66,8 +66,11 @@ def getTweetsFromId(tweetIdList, belongsToRow):
 	paramsEncode = urllib.urlencode(params)
 	query_url = base_url + paramsEncode
 	tweets = getRequest(query_url)
-	#Filters to only geotagged tweets
-	geoTweets = filter(lambda x: str(x['coordinates']) != 'None', tweets)
+	try:
+		#Filters to only geotagged tweets
+		geoTweets = filter(lambda x: str(x['coordinates']) != 'None', tweets)
+	except:
+		print "Error: " + str(tweets)
 	reducedTweets = [
 		{
 			'id_str': tweet['id_str'],
