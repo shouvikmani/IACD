@@ -11,8 +11,8 @@ from time import time
 from twitter_auth import authenticate
 from read_data import readFile, writeToFile, setHeaders
 
-#Token global variable
-bearerToken = authenticate()
+#Authentication global variable
+bearerToken = ''
 
 def getRequest(query_url):
 	headers = ({
@@ -58,7 +58,7 @@ def getFollowerCount(screenName):
 	followerCount = getRequest(query_url)['followers_count']
 	return followerCount
 
-def getTweetsFromId(tweetIdList):
+def getTweetsFromId(tweetIdList, belongsToRow):
 	base_url = 'https://api.twitter.com/1.1/statuses/lookup.json?'
 	idList = [tweet['id'] for tweet in tweetIdList]
 	idListString = ','.join(idList)
@@ -74,7 +74,9 @@ def getTweetsFromId(tweetIdList):
 			'created_at': tweet['created_at'],
 			'coordinates': tweet['coordinates'],
 			'hashtags': tweet['entities']['hashtags'],
-			'text': tweet['text'].encode('ascii', 'ignore')
+			'text': tweet['text'].encode('ascii', 'ignore'),
+			'belongsToRow': belongsToRow	#Start row of the tweet in tweets.csv
+											#Useful for debugging purposes
 		} for tweet in geoTweets
 	]
 	return reducedTweets
@@ -100,11 +102,11 @@ def downloadAllTweets(start, end):
 	tweetIdSource = 'data/tweets.csv'
 	tweetTargetSource = 'data/completeTweets.csv'
 	dataLines = readFile(tweetIdSource).splitlines()
-	fieldnames = ['id_str', 'created_at', 'coordinates', 'hashtags', 'text']
+	fieldnames = ['id_str', 'created_at', 'coordinates', 'hashtags', 'text', 'belongsToRow']
 	setHeaders(tweetTargetSource, fieldnames)
 	while (numRequests < 60):
 		tweetIdList = parseTweetIds(dataLines, requestStartRow, requestEndRow)
-		tweetData = getTweetsFromId(tweetIdList)
+		tweetData = getTweetsFromId(tweetIdList, requestStartRow)
 		print tweetData
 		print numRequests
 		print
@@ -118,6 +120,8 @@ def main():
 	start = time()
 	startRow = int(sys.argv[1])
 	endRow = int(sys.argv[2])
+	global bearerToken
+	bearerToken = authenticate(int(sys.argv[3]))
 	downloadAllTweets(startRow, endRow)
 
 if __name__ == '__main__':

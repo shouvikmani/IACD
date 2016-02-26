@@ -9,7 +9,6 @@ def readFile(source):
 def writeToFile(data, source, fieldnames):
 	with open(source, 'a') as f:
 		writer = DictWriter(f, fieldnames)
-		writer.writeheader()
 		for row in data:
 			writer.writerow(row)
 
