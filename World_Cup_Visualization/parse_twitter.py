@@ -101,7 +101,7 @@ def downloadAllTweets(start, end):
 	tweetTargetSource = 'data/completeTweets.csv'
 	dataLines = readFile(tweetIdSource).splitlines()
 	fieldnames = ['id_str', 'created_at', 'coordinates', 'hashtags', 'text']
-	setHeaders(tweetIdSource, fieldnames)
+	setHeaders(tweetTargetSource, fieldnames)
 	while (numRequests < 60):
 		tweetIdList = parseTweetIds(dataLines, requestStartRow, requestEndRow)
 		tweetData = getTweetsFromId(tweetIdList)
