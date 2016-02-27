@@ -7,6 +7,7 @@ import datetime
 import sys
 from pprint import pprint
 from time import time, sleep
+from random import sample
 
 from twitter_auth import authenticate
 from read_data import readFile, writeToFile, setHeaders
@@ -58,14 +59,18 @@ def getFollowerCount(screenName):
 	followerCount = getRequest(query_url)['followers_count']
 	return followerCount
 
-def getTweetsFromId(tweetIdList, belongsToRow):
+def getTweetsFromId(tweetIdList):
 	base_url = 'https://api.twitter.com/1.1/statuses/lookup.json?'
 	idList = [tweet['id'] for tweet in tweetIdList]
 	idListString = ','.join(idList)
 	params = {'id': idListString}
 	paramsEncode = urllib.urlencode(params)
 	query_url = base_url + paramsEncode
-	tweets = getRequest(query_url)
+	try:
+		tweets = getRequest(query_url)
+	except:
+		print "Error: Connection error"
+		return None		#Returns None on request errors (like connection timed out)
 	try:
 		#Filters to only geotagged tweets
 		geoTweets = filter(lambda x: str(x['coordinates']) != 'None', tweets)
@@ -77,9 +82,7 @@ def getTweetsFromId(tweetIdList, belongsToRow):
 			'created_at': tweet['created_at'],
 			'coordinates': tweet['coordinates'],
 			'hashtags': tweet['entities']['hashtags'],
-			'text': tweet['text'].encode('ascii', 'ignore'),
-			'belongsToRow': belongsToRow	#Start row of the tweet in tweets.csv
-											#Useful for debugging purposes
+			'text': tweet['text'].encode('ascii', 'ignore')
 		} for tweet in geoTweets
 	]
 	return reducedTweets
@@ -97,21 +100,23 @@ def parseTweetIds(dataLines, startRow, endRow):
 	return dataList
 
 def downloadAllTweets(start, end, tweetTargetSource):
-	requestStartRow = start
-	requestEndRow = start + 99
 	numRequests = 0
 	tweetIdSource = 'data/tweets.csv'
-	dataLines = readFile(tweetIdSource).splitlines()
-	fieldnames = ['id_str', 'created_at', 'coordinates', 'hashtags', 'text', 'belongsToRow']
+	dataLines = readFile(tweetIdSource).splitlines()[start:end]
+	reducedDataLines = sample(dataLines, 400000)	#Choosing random sample of 400000\
+	fieldnames = ['id_str', 'created_at', 'coordinates', 'hashtags', 'text']
 	setHeaders(tweetTargetSource, fieldnames)
-	while(requestEndRow <= end):
-		print "Parsing rows " + str(requestStartRow) + '-' + str(requestStartRow + 5999) + ' out of ' + str(end)
+	requestStartRow = 0
+	requestEndRow = 99
+	while(requestEndRow <= len(reducedDataLines)):
+		print "Parsing rows " + str(requestStartRow) + '-' + str(requestStartRow + 6000) + ' out of ' + str(len(reducedDataLines))
+		print str(float(requestStartRow)/float(len(reducedDataLines)) * 100) + "% complete"
 		#Inner while loop handles API Rate limit logic
 		while (numRequests < 60):
-			tweetIdList = parseTweetIds(dataLines, requestStartRow, requestEndRow)
-			tweetData = getTweetsFromId(tweetIdList, requestStartRow)
+			tweetIdList = parseTweetIds(reducedDataLines, requestStartRow, requestEndRow)
+			tweetData = getTweetsFromId(tweetIdList)
 			print "Request: " + str(numRequests)
-			writeToFile(tweetData, tweetTargetSource, fieldnames)
+			if (tweetData != None): writeToFile(tweetData, tweetTargetSource, fieldnames)
 			requestStartRow += 100
 			requestEndRow += 100
 			numRequests += 1
