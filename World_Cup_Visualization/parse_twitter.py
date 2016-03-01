@@ -76,6 +76,7 @@ def getTweetsFromId(tweetIdList):
 		geoTweets = filter(lambda x: str(x['coordinates']) != 'None', tweets)
 	except:
 		print "Error: " + str(tweets)
+		return None
 	reducedTweets = [
 		{
 			'id_str': tweet['id_str'],
@@ -113,6 +114,8 @@ def downloadAllTweets(start, end, tweetTargetSource):
 		print str(float(requestStartRow)/float(len(reducedDataLines)) * 100) + "% complete"
 		#Inner while loop handles API Rate limit logic
 		while (numRequests < 60):
+			if (getRateLimit('statuses')['resources']['statuses']['/statuses/lookup']['remaining'] == 0):
+				break
 			tweetIdList = parseTweetIds(reducedDataLines, requestStartRow, requestEndRow)
 			tweetData = getTweetsFromId(tweetIdList)
 			print "Request: " + str(numRequests)
