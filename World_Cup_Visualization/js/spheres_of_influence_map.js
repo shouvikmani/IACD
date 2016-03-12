@@ -4,11 +4,6 @@ var show25PercentSphere = true;
 var show50PercentSphere = false;
 var show75PercentSphere = false;
 
-$.getJSON("data/spheresOfInfluence.json", function(json) {
-    var countries = json;
-    setupSpheresOfInfluence(countries);
-});
-
 var map = new Datamap({
     element: document.getElementById('spheresOfInfluenceMap'),
     scope: 'world',
@@ -38,6 +33,8 @@ var map = new Datamap({
         });
     }
 });
+
+setupSpheresOfInfluence(jsonData);
 
 function setupSpheresOfInfluence(countries) {
 	var countryFills = {};

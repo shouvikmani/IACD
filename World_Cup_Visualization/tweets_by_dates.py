@@ -5,11 +5,12 @@ from pprint import pprint
 def getTweetDateStats(datesSet, countryInfo):
 	tweetsAboutCountryBasePath = 'data/Tweets_About_Country/'
 	tweetDateInfoDict = dict()
-	for date in datesSet 
+	for date in datesSet:
+		tweetDateInfoDict[date] = dict()
 	for country in countryInfo:
 		completeCountryFilePath = tweetsAboutCountryBasePath + country["Name"] + '_tweets.csv'
 		countryTweets = readCSVFile(completeCountryFilePath)
-
+		#TODO: Finish this code
 
 def getAllDates(countryInfo):
 	tweetsAboutCountryBasePath = 'data/Tweets_About_Country/'

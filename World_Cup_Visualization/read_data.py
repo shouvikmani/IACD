@@ -11,10 +11,6 @@ def readJSONFile(source):
 		data = json.load(f)
 	return data
 
-def writeJSONFile(data, source):
-	with open(source, 'w') as f:
-		json.dump(data, f)
-
 def readCSVFile(source):
 	csvData = []
 	with open(source) as f:
@@ -22,6 +18,10 @@ def readCSVFile(source):
 		for row in reader:
 			csvData.append(row)
 	return csvData
+
+def writeJSONFile(data, source):
+	with open(source, 'w') as f:
+		json.dump(data, f)
 
 def writeToFile(data, source, fieldnames):
 	with open(source, 'a') as f:
