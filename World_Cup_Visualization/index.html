@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset='utf-8'/>
+	<title>Visualizing World Cup 2014</title>
+	<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+	<!-- JQuery -->
+	<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+	<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+	<!-- D3.js -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
+	<!-- Topojson -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
+	<!-- DataMaps -->
+	<script src="static/datamaps.world.min.js"></script>
+	<!-- Custom styles-->
+	<link href="static/index.css" rel="stylesheet">
+</head>
+<body>
+	<h3 id="title">Twitter World Cup 2014 - Spheres of Influence</h3>
+	<p>The FIFA World Cup 2014 was the most tweeted event in history, totaling 672 tweets over the 32-day tournament. Soccer fans all over the world came onto Twitter to support their favorite teams, react to the big goals, and predict match outcomes. Twitter became a goldmine for tournament data, bringing multiple layers of data about countries, matches, and players all under one platform.</p>
+	<p>This is an analysis of that data featuring Spheres of Influence. A "Sphere of Influence" is the international brand value of the team, showing how popular a country's team is worldwide. More precisely, a x% Sphere of Influence shows the area around the center of a country from which x% of tweets about that country originate. The visualization below shows three Spheres of Influence, corresponding to 25%, 50%, and 75% of tweets about each country. Hover over the countries to see the Spheres and use the filter buttons to select which Spheres to display.</p>
+	<div id="spheresOfInfluenceMap"></div>
+	<div id="percent-toggle-buttons" class="btn-group" role="group" aria-label="...">
+	  <button id="percent25Button" onclick="toggle25PercentButton();" type="button" class="btn btn-default">25%</button>
+	  <button id="percent50Button" onclick="toggle50PercentButton();" type="button" class="btn btn-default">50%</button>
+	  <button id="percent75Button" onclick="toggle75PercentButton();" type="button" class="btn btn-default">75%</button>
+	</div>
+	<br><br><br>
+	<p>The most challenging part of this assignment was pulling the data from Twitter. Given just a dataset of 32 million tweet IDs (about the World Cup), I pulled a random sample of 12 million complete tweets using the Twitter API. 400,000 of these tweets were geotagged and used in my visualization. Because the Twitter API's rate limits only allowed me to pull 6000 tweets per 15 minutes, I ran 25 programs in parallel using 25 different API keys to pull the data over a period of 1.5 days.</p>
+	<br>
+
+	<!-- Spheres of Influence Map -->
+	<script src="js/spheres_of_influence_map.js"></script>
+</body>
+</html>

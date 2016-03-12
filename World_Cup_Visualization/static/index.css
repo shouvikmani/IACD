@@ -1,0 +1,40 @@
+#spheresOfInfluenceMap {
+	position: relative; 
+	width: 75%;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#percent-toggle-buttons {
+	margin-left: 42%;
+}
+
+#percent25Button {
+	background: #eee;
+}
+
+#percent50Button {
+	background: #fff;
+}
+
+#percent75Button {
+	background: #fff;
+}
+
+.btn:focus {
+  outline: #fff;
+}
+
+#title {
+	text-align: center;
+	font: 24px arial;
+}
+
+p {
+	width: 90%;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	font: 18px arial;
+}
