@@ -12,5 +12,7 @@ twitter_bot/imageDir/
 /World_Cup_Visualization/config.py
 /World_Cup_Visualization/nohup.out
 
+/Building_Visualization/data
+
 .DS_Store
 **.pyc
