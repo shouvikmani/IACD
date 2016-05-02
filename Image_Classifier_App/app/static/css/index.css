@@ -1,0 +1,52 @@
+.thumbnail {
+	text-align: center;
+	min-height: 180px;
+}
+
+.lead {
+    margin-bottom: 0px;
+}
+
+nav {
+	height: 50px;
+}
+
+.resultImage {
+	width: 200px;
+	height: 200px;
+	margin-bottom: 5px;
+}
+
+#addClassifierBtn {
+	display: block;
+	margin-left: 10px;
+	width: 130px;
+}
+
+.form-group {
+	width: 300px;
+	margin-right: 100px;
+	float: left;
+}
+
+.left-group {
+	float: left;
+}
+
+textarea {
+	resize: none;
+}
+
+#search-input {
+	width: 300px;
+}
+
+.form-inline {
+	width: 400px;
+	margin-right: 100px;
+	float: left;
+}
+
+.thumbnail_image {
+	height: 160px !important;
+}
