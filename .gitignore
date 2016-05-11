@@ -14,5 +14,9 @@ twitter_bot/imageDir/
 
 /Building_Visualization/data
 
+/Image_Classifier_App/media*
+/Image_Classifier_App/test_data/*
+/Image_Classifier_App/classifiers/featured_classifiers/*
+
 .DS_Store
 **.pyc

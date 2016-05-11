@@ -12,3 +12,5 @@ class Classifier(models.Model):
 	class1 = models.CharField(max_length=200)
 	algorithm = models.CharField(max_length=200)
 	description = models.CharField(max_length=200)
+	#Default is True, set to False when adding new Classifier
+	isFeatured = models.BooleanField(default=True)

@@ -15,8 +15,6 @@
 
     <!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-	<!-- Optional theme -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
 	<!-- Latest compiled and minified JavaScript -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 
@@ -25,7 +23,7 @@
   </head>
 
   <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+    <nav class="navbar navbar-inverse">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -34,7 +32,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Image Classifier App</a>
+          <a class="navbar-brand" href="/">Semi-Intelligent Image Classifier</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
@@ -43,60 +41,125 @@
       </div>
     </nav>
 
-    <div class="container"
-        <br><br><br><br>
+    <div class="container">
         <h2>Create a Classifier</h2>
+        <div class="lead">Step 1: Provide some basic information about your classifier.</div>
         <br>
-        <form action="/addClassifier/" method="post">
+        <form id="add-classifier-form" action="/addClassifier/" method="post" onkeypress="return event.keyCode != 13;">
             {% csrf_token %}
-            <div class="left-group">
-                <div class="form-group">
-                    <label for="class1">Class 1</label>
-                    <input type="text" class="form-control" id="class1" placeholder="Class 1">
-                </div>
-                <br><br><br><br>
-                <div class="form-group">
-                    <label for="class2">Class 2</label>
-                    <input type="text" class="form-control" id="class2" placeholder="Class 2">
-                </div>
-                <br><br><br><br>
-                <div class="form-group">
-                    <label for="algorithm">Algorithm</label>
-                    <input type="text" class="form-control" id="algorithm" placeholder="Algorithm">
-                </div>
-                <br><br><br><br>
-                <div class="form-group">
-                  <label for="description">Description:</label>
-                  <textarea class="form-control" rows="3" id="description" placeholder="Description"></textarea>
-                </div>
-                <br><br><br><br><br><br>
-                <button class="btn btn-primary" onclick="nextButtonClicked();">Next</button>
+            <div class="form-group">
+                <label for="classifierName">Classifier Name</label>
+                <input type="text" class="form-control" id="classifierName" name="classifierName" placeholder="e.g. DayNight">
             </div>
-            <div class="middle-group">
-                <div class="form-inline">
-                    <label for="search-input">Instagram Search Query</label>
-                    <br>
-                    <input type="text" class="form-control" id="search-input" placeholder="Query">
-                    <div class="btn btn-primary btn-sm" onclick="instagramSearch();">Search</div>
+            <div class="form-group">
+                <label for="class0">Class 1</label>
+                <input type="text" class="form-control" id="class0" name="class0" placeholder="e.g. Day">
+            </div>
+            <div class="form-group">
+                <label for="class1">Class 2</label>
+                <input type="text" class="form-control" id="class1" name="class1" placeholder="e.g. Night">
+            </div>
+            <div class="form-group">
+              <label for="description">Description:</label>
+              <textarea class="form-control" rows="3" id="description" name="description" placeholder="e.g. Identifies whether an image is a day or night image."></textarea>
+            </div>
+            <input type="hidden" id="imageClassificationsJSON" name="imageClassificationsJSON">
+            <br>
+            <!-- <button class="btn btn-primary" onclick="nextButtonClicked();">Next</button> -->
+            <hr>
+            <br>
+            <div class="lead">Step 2: Train your classifier with images.</div>
+            <br>
+            <p>Search for images relevant to your classifier and label them one-by-one. Enter a search query and click Search to search for images. Then, use the image viewer to label the images. Be sure to search for and label images from both classes.</p>
+            <br>
+            <div class="form-inline">
+                <label for="search-input">Instagram Search Query</label>
+                <br>
+                <input type="text" class="form-control" id="search-input" placeholder="Query">
+                <div class="btn btn-primary btn-sm" onclick="searchImages();">Search</div>
+            </div>
+            <br>
+            <div class="jumbotron" id="imageViewer">
+                <img src="" id="search-image">
+                <div id="classification-button-group" z-index="2">
+                    <div class="btn btn-primary classification-button" onclick="classifyImage(0);">Class 1</div>
+                    <div class="btn btn btn-danger classification-button" onclick="discardImage();">Discard</div>
+                    <div class="btn btn-primary classification-button" onclick="classifyImage(1);">Class 2</div>
                 </div>
             </div>
+            <br>
+            <input type="submit" class="btn btn-primary" value="Save Classifier" onclick="attachClassificationData();">
+            <br><br><br><br>
         </form>
     </div>
   </body>
 </html>
 
 <script>
-//     $('.form-inline').style.visibility = 'hidden';
+    var images;
+    var currentImageIndex;
+    var imageClassifications = [];
+    var offset = 0;
 
-//     function nextButtonClicked() {
-//         $('.form-inline').style.visibility = 'auto';
-//     }
+    function searchImages() {
+        showImageViewer();
+        
+        var query = $('#search-input').val();
+        var auth = btoa('7BdZGZe2AtDvvlk5cImUI4n/UjeYrPD3HxeJ15KynFw' + ':' + '7BdZGZe2AtDvvlk5cImUI4n/UjeYrPD3HxeJ15KynFw');
+        var rootUrl = 'https://api.datamarket.azure.com/Bing/Search';
+        var searchFilter = '/Image?$top=50&$skip=' + offset.toString() + '&Query=';
 
-    function instagramSearch() {
-        query = document.getElementById('search-input').value;
-        url = 'https://api.instagram.com/v1/tags/' + query + '/media/recent?access_token=' + "{{ access_token }}"
-        $.post(url, function(data, status){
-            console.log(data);
+        $.ajax({
+            method: "GET",
+            url: rootUrl + searchFilter + "'" + query + "'",
+            dataType: 'json',
+            headers: {
+                'Authorization' : 'Basic ' + auth
+            },
+            success: saveImages
         });
+    }
+
+    function saveImages(result) {
+        images = result['d']['results'];
+        currentImageIndex = 0;
+        displayImage();
+    }
+
+    function displayImage() {
+        console.log(imageClassifications);
+        console.log(offset);
+        if (currentImageIndex < images.length) {
+            imageURL = images[currentImageIndex]['MediaUrl'];
+            $('#search-image').attr('src', imageURL);
+        } else {
+            offset += 51;
+            searchImages();
+        }
+    }
+
+    function classifyImage(classification) {
+        var currentImageClassification = {
+            "url": images[currentImageIndex]['MediaUrl'],
+            "label": classification
+        }
+        imageClassifications.push(currentImageClassification);
+        currentImageIndex++;
+        displayImage();
+    }
+
+    function discardImage() {
+        currentImageIndex++;
+        displayImage();
+
+    }
+
+    function showImageViewer() {
+        $("#imageViewer").show();
+    }
+
+    function attachClassificationData() {
+        var classificationsJSON = JSON.stringify(imageClassifications);
+        $("#imageClassificationsJSON").val(classificationsJSON);
     }
 </script>

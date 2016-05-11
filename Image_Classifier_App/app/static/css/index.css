@@ -11,6 +11,10 @@ nav {
 	height: 50px;
 }
 
+.navbar {
+	border-radius: 0px;
+}
+
 .resultImage {
 	width: 200px;
 	height: 200px;
@@ -24,13 +28,8 @@ nav {
 }
 
 .form-group {
-	width: 300px;
+	width: 400px;
 	margin-right: 100px;
-	float: left;
-}
-
-.left-group {
-	float: left;
 }
 
 textarea {
@@ -38,15 +37,46 @@ textarea {
 }
 
 #search-input {
-	width: 300px;
+	width: 340px;
 }
 
 .form-inline {
-	width: 400px;
+	width: 500px;
 	margin-right: 100px;
-	float: left;
 }
 
 .thumbnail_image {
 	height: 160px !important;
 }
+
+#classification-button-group {
+	position: absolute;
+	top: 340px;
+	margin-left: 160px;
+}
+
+.classification-button {
+	margin-right: 20px;
+}
+
+#search-image {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 500px;
+	max-height: 300px;
+	padding-top: 20px;
+}
+
+#imageViewer {
+	position: relative;
+	padding: 0;
+	width: 600px;
+	height: 400px;
+	display: none;
+}
+
+#my-classifier {
+	height: 227px;
+}
+
