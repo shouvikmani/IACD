@@ -34,18 +34,22 @@ function plotMarkers(data) {
 		var deaths = data[i]['deaths'];
 		var injuries = data[i]['injuries'];
 
-		marker = L.marker([strikeLat, strikeLon], {icon: getMarkerIcon(country)}).addTo(map);
-		marker.bindPopup("<b>Location: </b>" + region + ", " + country
-						+ "<br><b>Date: </b>" + date
-						+ "<br>" + narrative
-						+ "<br><br>"
-						+ "<b>Deaths: </b>" + deaths
-						+ "&nbsp;&nbsp;|&nbsp;&nbsp;"
-						+ "<b>Injuries: </b>" + injuries);
+		try {
+			marker = L.marker([strikeLat, strikeLon], {icon: getMarkerIcon(country)}).addTo(map);
+			marker.bindPopup("<b>Location: </b>" + region + ", " + country
+							+ "<br><b>Date: </b>" + date
+							+ "<br>" + narrative
+							+ "<br><br>"
+							+ "<b>Deaths: </b>" + deaths
+							+ "&nbsp;&nbsp;|&nbsp;&nbsp;"
+							+ "<b>Injuries: </b>" + injuries);
+		} catch(err) {
+			continue;
+		}
 	}
 }
 
-//Converts an ISO date time value to a local date time string 
+//Converts an ISO date time value to a local date time string
 function getLocalDate(isoDateTime) {
 	var utcDate = new Date(isoDateTime);
 	var localDate = utcDate.toLocaleString();
@@ -76,12 +80,15 @@ function addSatImages(data) {
 		var strikeLat = data[i]['lat'];
 		var strikeLon = data[i]['lon'];
 
-		var mapURL = googleMapsRootURL + 'center=' + strikeLat + ',' + strikeLon
-						+ '&zoom=' + zoomLevel + '&size=' + size + '&maptype='
-						+ mapType + '&key=' + googleMapsApiKey;
-		$('#sat-image-grid').append('<img class="sat-image" src=' + mapURL + '>');
+		if (strikeLat != "" && strikeLon != "") {
+			var mapURL = googleMapsRootURL + 'center=' + strikeLat + ',' + strikeLon
+							+ '&zoom=' + zoomLevel + '&size=' + size + '&maptype='
+							+ mapType + '&key=' + googleMapsApiKey;
+			$('#sat-image-grid').append('<img class="sat-image" src=' + mapURL + '>');
+		}
 	}
 }
+
 //Hides bottom label
 $('.leaflet-control-attribution').hide();
 //Sets map height to 80% of screen height
