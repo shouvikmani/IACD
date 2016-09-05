@@ -54,8 +54,38 @@ body {
     margin-right: auto;
 }
 
-.sat-image {
-	display: inline;
+.sat-image-container {
+	position: relative;
+	display: inline-block;
+	height: 220px;
+	width: 220px;
 	margin-right: 6px;
 	margin-bottom: 3px;
+}
+
+.sat-image-overlay {
+	position: absolute;
+	height: 220px;
+	width: 220px;
+	z-index: 1;
+	background-color: rgba(56, 56, 56, .80);
+}
+
+.sat-image-overlay-text {
+	font-family: "helvetica";
+	text-align: left;
+	padding: 5px 5px 5px 5px;
+	font-size: 14px;
+	color: #ddd;
+}
+
+.sat-image {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	z-index: 2;
+}
+
+.sat-image-container:hover > .sat-image {
+	z-index: 0;
 }

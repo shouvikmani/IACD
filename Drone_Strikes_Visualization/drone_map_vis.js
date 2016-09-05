@@ -79,12 +79,34 @@ function addSatImages(data) {
 	for (var i = data.length - 1; i > -1; i--) {
 		var strikeLat = data[i]['lat'];
 		var strikeLon = data[i]['lon'];
+		var region = data[i]['location'];
+		var country = data[i]['country'];
+		var date = getLocalDate(data[i]['date']);
+		var narrative = data[i]['narrative'];
+		var deaths = data[i]['deaths'];
+		var injuries = data[i]['injuries'];
 
 		if (strikeLat != "" && strikeLon != "") {
 			var mapURL = googleMapsRootURL + 'center=' + strikeLat + ',' + strikeLon
 							+ '&zoom=' + zoomLevel + '&size=' + size + '&maptype='
 							+ mapType + '&key=' + googleMapsApiKey;
-			$('#sat-image-grid').append('<img class="sat-image" src=' + mapURL + '>');
+			$('#sat-image-grid').append(
+				'<div class="sat-image-container">' +
+					'<div class="sat-image-overlay">' +
+						'<div class="sat-image-overlay-text">' +
+							"<b>Location: </b>" + region + ", " + country
+							+ "<br>"
+							+ "<br><b>Date: </b>" + date
+							+ "<br>" + "<b>Narrative: </b>" + narrative
+							+ "<br><br>"
+							+ "<b>Deaths: </b>" + deaths
+							+ "&nbsp;&nbsp;|&nbsp;&nbsp;"
+							+ "<b>Injuries: </b>" + injuries +
+						'</div>' +
+					'</div>' +
+					'<img class="sat-image" src=' + mapURL + '>' +
+				'<div>'
+			);
 		}
 	}
 }
