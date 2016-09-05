@@ -71,12 +71,7 @@ function getMarkerIcon(country) {
 
 //Adds a grid of static sattelite imagery
 function addSatImages(data) {
-	$.ajaxSetup({async: false});
-	var googleMapsApiKey;
-	$.getJSON('config.json', function(data) {
-		googleMapsApiKey = data['google_maps_API_key'];
-	});
-	$.ajaxSetup({async: true});
+	var googleMapsApiKey = 'AIzaSyBLtOssY47tO3dbrV6liAY5X7LhVjTaNw8'
 	var zoomLevel = '17';
 	var googleMapsRootURL = 'https://maps.googleapis.com/maps/api/staticmap?';
 	var size = '220x220';
