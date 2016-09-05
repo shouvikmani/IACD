@@ -38,7 +38,7 @@ function plotMarkers(data) {
 			marker = L.marker([strikeLat, strikeLon], {icon: getMarkerIcon(country)}).addTo(map);
 			marker.bindPopup("<b>Location: </b>" + region + ", " + country
 							+ "<br><b>Date: </b>" + date
-							+ "<br>" + narrative
+							+ "<br>" + "<b>Narrative: </b>" + narrative
 							+ "<br><br>"
 							+ "<b>Deaths: </b>" + deaths
 							+ "&nbsp;&nbsp;|&nbsp;&nbsp;"
@@ -71,7 +71,12 @@ function getMarkerIcon(country) {
 
 //Adds a grid of static sattelite imagery
 function addSatImages(data) {
-	var googleMapsApiKey = 'AIzaSyBLtOssY47tO3dbrV6liAY5X7LhVjTaNw8'
+	$.ajaxSetup({async: false});
+	var googleMapsApiKey;
+	$.getJSON('config.json', function(data) {
+		googleMapsApiKey = data['google_maps_API_key'];
+	});
+	$.ajaxSetup({async: true});
 	var zoomLevel = '17';
 	var googleMapsRootURL = 'https://maps.googleapis.com/maps/api/staticmap?';
 	var size = '220x220';
