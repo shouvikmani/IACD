@@ -9,6 +9,13 @@ body {
 	z-index: 1;
 }
 
+#legend {
+	position: absolute;
+	right: 0px;
+	bottom: 0px;
+	z-index: 2;
+}
+
 #text {
 	color: #ddd;
 	font-family: sans-serif;
